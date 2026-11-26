@@ -29,7 +29,7 @@ jobs:
           xcodebuild clean build \
             -project RemoteMousePro.xcodeproj \
             -scheme RemoteMouseApp \
-            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
             -configuration Release \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
@@ -37,14 +37,19 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             AD_HOC_CODE_SIGNING_ALLOWED=YES 2>&1 | tee xcodebuild.log
 
-      - name: Show compile errors on failure
+      - name: Capture and report build errors
         if: failure()
         run: |
-          echo "::group::Full XcodeBuild Log"
-          tail -n 200 xcodebuild.log
-          echo "::endgroup::"
-          echo "=== COMPILER ERRORS ==="
-          grep -C 3 "error:" xcodebuild.log || true
+          echo "### ❌ XcodeBuild Failure Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          grep -C 2 "error:" xcodebuild.log | head -n 80 >> $GITHUB_STEP_SUMMARY || true
+          tail -n 60 xcodebuild.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          while IFS= read -r line; do
+            if [[ "$line" == *"error:"* ]]; then
+              echo "::error::$line"
+            fi
+          done < xcodebuild.log
 
       - name: Package Payload into IPA
         run: |

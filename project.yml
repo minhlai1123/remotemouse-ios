@@ -3,6 +3,12 @@ options:
   bundleIdPrefix: com.remotemouse
   deploymentTarget:
     iOS: "15.0"
+schemes:
+  RemoteMouseApp:
+    build:
+      targets:
+        RemoteMouseCore: all
+        RemoteMouseApp: all
 targets:
   RemoteMouseCore:
     type: framework
