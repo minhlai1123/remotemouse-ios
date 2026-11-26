@@ -2,22 +2,20 @@ name: Build iOS IPA
 
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
-    name: Build iOS Application & IPA
-    runs-on: macos-14
+    name: Build iOS IPA
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Xcode
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -25,27 +23,28 @@ jobs:
       - name: Generate Xcode Project
         run: xcodegen generate
 
-      - name: Build iOS App (.app)
+      - name: Build iOS Application
         run: |
           xcodebuild clean build \
             -project RemoteMousePro.xcodeproj \
             -scheme RemoteMouseApp \
             -sdk iphoneos \
             -configuration Release \
-            -derivedDataPath build/derivedData \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             AD_HOC_CODE_SIGNING_ALLOWED=YES
 
-      - name: Package IPA
+      - name: Package Payload into IPA
         run: |
           mkdir -p Payload
-          APP_PATH=$(find build/derivedData/Build/Products/Release-iphoneos -name "*.app" -type d | head -n 1)
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -n 1)
           echo "Found app at: $APP_PATH"
           cp -r "$APP_PATH" Payload/
           zip -r RemoteMousePro.ipa Payload
           echo "Successfully created RemoteMousePro.ipa"
+          ls -la RemoteMousePro.ipa
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
@@ -53,3 +52,14 @@ jobs:
           name: RemoteMousePro-IPA
           path: RemoteMousePro.ipa
           retention-days: 14
+
+      - name: Create GitHub Release with IPA
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0-ios
+          name: "Remote Mouse Pro iOS v1.0.0"
+          body: "Direct download for RemoteMousePro.ipa."
+          files: RemoteMousePro.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
