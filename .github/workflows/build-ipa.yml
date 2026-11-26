@@ -25,6 +25,7 @@ jobs:
 
       - name: Build iOS Application
         run: |
+          set -o pipefail
           xcodebuild clean build \
             -project RemoteMousePro.xcodeproj \
             -scheme RemoteMouseApp \
@@ -34,7 +35,16 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES
+            AD_HOC_CODE_SIGNING_ALLOWED=YES 2>&1 | tee xcodebuild.log
+
+      - name: Show compile errors on failure
+        if: failure()
+        run: |
+          echo "::group::Full XcodeBuild Log"
+          tail -n 200 xcodebuild.log
+          echo "::endgroup::"
+          echo "=== COMPILER ERRORS ==="
+          grep -C 3 "error:" xcodebuild.log || true
 
       - name: Package Payload into IPA
         run: |
