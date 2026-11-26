@@ -6,6 +6,8 @@ DerivedData/
 *.xcodeproj
 *.xcworkspace
 xcuserdata/
+*.ipa
+Payload/
 
 # Swift Package Manager
 .build/
