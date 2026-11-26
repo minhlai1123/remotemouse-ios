@@ -86,6 +86,11 @@ public final class KeychainTokenStorage {
     }
 
     @discardableResult
+    public func deleteToken(for host: String) -> Bool {
+        return deletePairing(host: host)
+    }
+
+    @discardableResult
     public func clearAll() -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,

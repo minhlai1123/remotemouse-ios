@@ -74,11 +74,11 @@ public final class GestureManager {
     }
 
     public func onPrimaryClick() {
-        client.sendMouseClick(button: primaryButtonId, count: 1)
+        client.sendMouseClick(button: primaryButtonId, clickCount: 1)
     }
 
     public func onSecondaryClick() {
-        client.sendMouseClick(button: secondaryButtonId, count: 1)
+        client.sendMouseClick(button: secondaryButtonId, clickCount: 1)
     }
 
     public func cancelInertia() {

@@ -122,7 +122,6 @@ public final class RMPPClient {
         tcpOptions.noDelay = true
 
         let params = NWParameters(tls: tlsOptions, tcp: tcpOptions)
-        params.preferNoPath = true
 
         let conn = NWConnection(host: nwHost, port: nwPort, using: params)
         self.connection = conn
