@@ -1,0 +1,32 @@
+name: RemoteMousePro
+options:
+  bundleIdPrefix: com.remotemouse
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  RemoteMouseApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources/RemoteMouseApp
+      - path: Sources/RemoteMouseCore
+    info:
+      path: Sources/RemoteMouseApp/Info.plist
+      properties:
+        CFBundleDisplayName: "Remote Mouse Pro"
+        CFBundleIdentifier: "com.remotemouse.ios"
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        NSCameraUsageDescription: "Remote Mouse Pro requires camera access to scan Desktop Host QR pairing codes."
+        NSLocalNetworkUsageDescription: "Remote Mouse Pro requires local network access to discover and connect to Desktop Host."
+        NSBonjourServices:
+          - "_rmpp._tcp"
+        UILaunchScreen: {}
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.remotemouse.ios
+      INFOPLIST_FILE: Sources/RemoteMouseApp/Info.plist
+      CODE_SIGNING_ALLOWED: NO
+      CODE_SIGNING_REQUIRED: NO
+      CODE_SIGN_IDENTITY: ""
+      DEVELOPMENT_TEAM: ""
