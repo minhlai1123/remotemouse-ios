@@ -16,8 +16,11 @@ targets:
     deploymentTarget: "15.0"
     sources:
       - path: Sources/RemoteMouseCore
+    info:
+      path: Sources/RemoteMouseCore/Info.plist
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.remotemouse.core
+      INFOPLIST_FILE: Sources/RemoteMouseCore/Info.plist
       CODE_SIGNING_ALLOWED: NO
       CODE_SIGNING_REQUIRED: NO
 
@@ -27,6 +30,8 @@ targets:
     deploymentTarget: "15.0"
     dependencies:
       - target: RemoteMouseCore
+        embed: true
+        codeSign: false
     sources:
       - path: Sources/RemoteMouseApp
     info:
