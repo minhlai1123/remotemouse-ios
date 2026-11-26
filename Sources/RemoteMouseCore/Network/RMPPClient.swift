@@ -23,7 +23,7 @@ public protocol RMPPClientDelegate: AnyObject {
 }
 
 public extension RMPPClientDelegate {
-    func didReceivePairingToken(_ token: String, forHost host: String) {}
+    func rmppClient(_ client: RMPPClient, didReceivePairingToken token: String, forHost host: String) {}
 }
 
 public final class RMPPClient {

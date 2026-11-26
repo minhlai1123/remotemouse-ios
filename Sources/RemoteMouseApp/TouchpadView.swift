@@ -96,7 +96,7 @@ public struct TouchpadView: View {
                     Text("Touchpad Area\nDrag to move • Tap to click\n2-finger scroll with inertia")
                         .multilineTextAlignment(.center)
                         .font(.subheadline)
-                        .foregroundColor(.tertiaryLabel)
+                        .foregroundColor(Color(.tertiaryLabel))
                 }
                 .gesture(
                     DragGesture(minimumDistance: 0)
@@ -248,4 +248,5 @@ public final class TouchpadViewModel: ObservableObject, RMPPClientDelegate {
 
     public func rmppClient(_ client: RMPPClient, didReceiveFrame frame: RMPPFrame) {}
     public func rmppClient(_ client: RMPPClient, didEncounterError error: Error) {}
+    public func rmppClient(_ client: RMPPClient, didReceivePairingToken token: String, forHost host: String) {}
 }
